@@ -65,7 +65,7 @@
     } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyBx71S0b41k1M1UrsiIXb4zRss_Sbth8eM",
+      apiKey: "",
       authDomain: "janken-react.firebaseapp.com",
       projectId: "janken-react",
       storageBucket: "janken-react.appspot.com",
@@ -242,7 +242,7 @@
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer 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`, // あなたの API キー
+              "Authorization": `Bearer `, // あなたの API キー
             },
             body: JSON.stringify({
               "model": "gpt-3.5-turbo",
@@ -271,38 +271,6 @@
     guButton.addEventListener("click", reply);
     choButton.addEventListener("click", reply);
     parButton.addEventListener("click", reply);
-
-    // const apiKey = "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";
-    // const apiUrl = "https://api.openai.com/v1/chat/completions";
-
-    // const resultContainer = document.getElementById("advice");
-
-    // const prompt = `下記勝率を鑑みて次に出すべきじゃんけんの手は？ (${historyMessage}) `;
-    // const maxTokens = 100;
-
-    // const requestData = {
-    //   prompt: prompt,
-    //   max_tokens: maxTokens
-    // };
-
-    // const headers = {
-    //   "Content-Type": "application/json",
-    //   "Authorization": `Bearer ${apiKey}`
-    // };
-
-    // fetch(apiUrl, {
-    //   method: "POST",
-    //   headers: headers,
-    //   body: JSON.stringify(requestData)
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     const generatedAdvice = data.choices[0].message.content;
-    //     resultContainer.textContent = generatedAdvice;
-    //   })
-    //   .catch(error => console.error("Error:", error));
-
-
 
   </script>
 
