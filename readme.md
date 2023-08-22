@@ -2,7 +2,7 @@
 
 ## DEMO
 
-  - デプロイしている場合はURLを記入（任意）
+  - デプロイ https://katsuki1128.github.io/janken_api_firebase/
 
 ## 紹介と使い方
 
