@@ -44,7 +44,7 @@
     </div>
 
     <div class="result_container">
-      <div>AIアドバイス：</div>
+      <div>博多弁によるAIアドバイス：</div>
       <div id="advice"></div>
     </div>
 
@@ -65,13 +65,15 @@
     } from "https://www.gstatic.com/firebasejs/10.2.0/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "",
+      apiKey: "AIzaSyBx71S0b41k1M1UrsiIXb4zRss_Sbth8eM",
       authDomain: "janken-react.firebaseapp.com",
       projectId: "janken-react",
       storageBucket: "janken-react.appspot.com",
       messagingSenderId: "402635589118",
       appId: "1:402635589118:web:a85b9b5fed05cd6c832caf"
     };
+
+    const chatGptApiKey = "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";
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
@@ -233,34 +235,84 @@
     }
 
     // AIアドバイス
-    function reply() {
-      const text = document.getElementById("winlose").value;
+    function sendChat() {
+      // const winlosehistory = document.getElementById("winlose");
+      // console.log(winlosehistory);
 
-      async function getResponse() {
-        try {
-          const response = await fetch("https://api.openai.com/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer `, // あなたの API キー
-            },
-            body: JSON.stringify({
-              "model": "gpt-3.5-turbo",
-              "messages": [
-                { "role": "user", "content": text + "死を前にした戦国武将として名乗り、無理に次に出すべきジャンケンを５０文字で完結に述べよ" }
-              ]
-            })
-          });
+      // OpenAIのエンドポイントURLを定義。
+      const endPoint = "https://api.openai.com/v1/chat/completions";
 
-          const responseData = await response.json();
-          const chatgptResponse = responseData.choices[0].message.content;
+      const messages = [
+        {
+          role: "system",
+          content: "博多弁の人として振る舞ってください"
+        },
+        {
+          role: "assistant",
+          content: `今の勝率は${historyMessage}です`
+        },
+        {
+          role: "user", // ユーザーからのメッセージ 
+          content: "博多弁のおしとやかな女の子として、次に出すべきジャンケンを強引に話してね"
+        }
+      ];
+
+      // リクエストオプション
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${chatGptApiKey}`
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: messages,
+          max_tokens: 50 //レスポンスのトークンの最大数
+        })
+      };
+
+      // Requestオブジェクトを作成。
+      const myRequest = new Request(endPoint, requestOptions);
+
+      // fetch APIを使用してリクエストを送信
+      fetch(myRequest)
+        .then(res => res.json()) // レスポンスをJSONとしてパース
+        .then(json => {
+          // JSONレスポンスからメッセージを取得してコンソールに出力
+          const chatgptResponse = json.choices[0].message.content;
           console.log(chatgptResponse);
           document.getElementById("advice").textContent = chatgptResponse;
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      getResponse();
+        })
+        .catch(err => {
+          // エラー発生時の処理をここに書く
+        });
+
+      // async function getResponse() {
+      //   try {
+      //     const response = await fetch(endPoint, {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //         "Authorization": `Bearer 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`,
+      //       },
+      //       body: JSON.stringify({
+      //         "model": "gpt-3.5-turbo",
+      //         "messages": [
+      //           { "role": "user", "content": text + "死を前にした戦国武将として名乗り、無理に次に出すべきジャンケンを５０文字で完結に述べよ" }
+      //         ]
+      //       })
+      //     });
+
+      //     const responseData = await response.json();
+      //     console.log("responseData", responseData);
+      //     const chatgptResponse = responseData.choices[0].message.content;
+      //     console.log(chatgptResponse);
+      //     document.getElementById("advice").textContent = chatgptResponse;
+      //   } catch (error) {
+      //     console.log(error);
+      //   }
+      // }
+      // getResponse();
     }
     // ボタン要素を取得
     const guButton = document.getElementById("gu_btn");
@@ -268,9 +320,9 @@
     const parButton = document.getElementById("par_btn");
 
     // 各ボタンにクリックイベントリスナーを追加
-    guButton.addEventListener("click", reply);
-    choButton.addEventListener("click", reply);
-    parButton.addEventListener("click", reply);
+    guButton.addEventListener("click", sendChat);
+    choButton.addEventListener("click", sendChat);
+    parButton.addEventListener("click", sendChat);
 
   </script>
 
